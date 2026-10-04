@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>StudyMate</title>
+
+   <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f1ff;
+        color: #222;
+        padding: 30px 15px;
+    }
+header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #5b3fa3;
+}
+
+header p {
+    color: #777;
+    margin-top: 5px;
+}
+    h1 {
+        text-align: center;
+        color: #5b3fa3;
+        font-size: 42px;
+        margin-bottom: 10px;
+    }
+
+    .planner {
+        background: white;
+        padding: 30px;
+        border-radius: 18px;
+        max-width: 650px;
+        margin: 25px auto;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .planner > p {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+    }
+.focus-box {
+    background: #f0ebff;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+.progress-card {
+    background: #f4f1ff;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.progress-card p {
+    margin: 0;
+    color: #666;
+}
+
+.progress-card strong {
+    display: block;
+    font-size: 32px;
+    color: #5b3fa3;
+    margin-top: 5px;
+}
+
+.focus-box h2 {
+    margin-top: 0;
+    border: none;
+    padding: 0;
+}
+
+.focus-box p {
+    color: #666;
+    margin: 5px 0 0;
+}
+
+    h2 {
+        color: #5b3fa3;
+        margin-top: 25px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 8px;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 5px;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    
+button {
+    background: #6c4ab6;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-right: 8px;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+    button:hover {
+        background: #54358f;
+    }
+
+    
+.task {
+    background: #f0ebff;
+    padding: 18px;
+    margin-top: 12px;
+    border-radius: 12px;
+    border-left: 5px solid #6c4ab6;
+    transition: 0.2s;
+}
+
+.task:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.task strong {
+    color: #5b3fa3;
+    font-size: 18px;
+}
+
+.task p {
+    color: #666;
+    margin: 8px 0;
+} 
+#progressText {
+    color: #5b3fa3;
+    font-weight: bold;
+    margin-top: 8px;
+}
+@media (max-width: 600px) {
+    body {
+        padding: 20px 10px;
+    }
+
+    h1 {
+        font-size: 32px;
+    }
+
+    .planner {
+        padding: 20px;
+    }
+
+    button {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">StudyMate 📚</div>
+        <p>Plan • Study • Achieve</p>
+    </header>
+
+    <h1>My Study Planner</h1>
+<div class="focus-box">
+    <h2>🎯 Today's Focus</h2>
+    <p>Stay focused, study smart, and reach your goals.</p>
+</div>
+    <div class="planner">
+
+        <p>Your simple study planning website.</p>
+
+        <h2>My Study Planner</h2>
+
+        <!-- 🟨 NEW: IDs added to the inputs -->
+        <label>Study Subject:</label>
+        <input id="subject" type="text" placeholder="Enter subject">
+
+        <br><br>
+
+        <label>Study Date:</label>
+        <input id="date" type="date">
+
+        <br><br>
+
+        <label>Study Time:</label>
+        <input id="time" type="time">
+
+        <br><br>
+
+        <!-- 🟨 NEW: Button now runs JavaScript -->
+        <button onclick="addTask()">Add Task</button>
+<button onclick="clearTasks()">🗑️ Clear All Tasks</button>
+
+
+        <h2>My Tasks</h2>
+
+        <!-- 🟨 NEW: Tasks will appear here -->
+        <div id="taskList"></div>
+
+        <h2>My Progress</h2>
+
+       <div class="progress-card">
+    <p>Tasks Completed</p>
+    <strong id="taskCount">0</strong>
+    <p id="progressText">0% completed</p>
+</div> 
+<h2>My Notes</h2>
+
+        <textarea id="notes" rows="5"
+    placeholder="Write your study notes here..."></textarea>    </div>
+
+
+    <!-- 🟨 NEW: JavaScript starts here -->
+    <script>
+
+let count = 0;
+let completedCount = 0;
+let tasks=[];
+
+function addTask() {
+
+    let subject = document.getElementById("subject").value;
+    let date = document.getElementById("date").value;
+    let time = document.getElementById("time").value;
+
+    if (subject === "") {
+        alert("Please enter a subject!");
+        return;
+    }
+
+    let task = document.createElement("div");
+
+    task.className = "task";
+
+    task.innerHTML =
+        "<strong>" + subject + "</strong>" +
+        "<p>Date: " + date + "</p>" +
+        "<p>Time: " + time + "</p>" +
+        "<button onclick='completeTask(this)'>✅ Complete</button>" +
+        "<button onclick='deleteTask(this)'>🗑️ Delete</button>";
+
+    document.getElementById("taskList").appendChild(task);
+
+    count++;
+tasks.push({
+    subject: subject,
+    date: date,
+    time: time
+});
+localStorage.setItem("studyTasks", JSON.stringify(tasks));
+
+
+    document.getElementById("subject").value = "";
+    document.getElementById("date").value = "";
+    document.getElementById("time").value = "";
+}
+
+function completeTask(button) {
+
+    let taskElement = button.parentElement;
+
+    taskElement.style.opacity = "0.5";
+    button.innerText = "✅ Completed";
+    button.disabled = true;
+
+    completedCount++;
+
+    document.getElementById("taskCount").innerText = completedCount;
+let progress = count > 0 ? Math.round((completedCount / count) * 100) : 0;
+document.getElementById("progressText").innerText = progress + "% completed";
+
+    let subject = taskElement.querySelector("strong").innerText;
+
+    tasks.forEach(function(task) {
+        if (task.subject === subject) {
+            task.completed = true;
+        }
+    });
+
+    localStorage.setItem("studyTasks", JSON.stringify(tasks));
+}
+function deleteTask(button) {
+
+    let taskElement = button.parentElement;
+
+    let subject = taskElement.querySelector("strong").innerText;
+
+    taskElement.remove();
+
+    tasks = tasks.filter(function(task) {
+        return task.subject !== subject;
+    });
+
+    localStorage.setItem("studyTasks", JSON.stringify(tasks));
+
+    count--;
+}
+let savedTasks = JSON.parse(localStorage.getItem("studyTasks")) || [];
+
+tasks = savedTasks;
+
+savedTasks.forEach(function(savedTask) {
+
+    let task = document.createElement("div");
+
+    task.className = "task";
+
+    task.innerHTML =
+        "<strong>" + savedTask.subject + "</strong>" +
+        "<p>Date: " + savedTask.date + "</p>" +
+        "<p>Time: " + savedTask.time + "</p>" +
+        "<button onclick='completeTask(this)'>✅ Complete</button>" +
+        "<button onclick='deleteTask(this)'>🗑️ Delete</button>";
+
+    document.getElementById("taskList").appendChild(task);
+
+count++;
+
+if (savedTask.completed) {
+    task.style.opacity = "0.5";
+
+    let completeButton = task.querySelector("button");
+
+    completeButton.innerText = "✅ Completed";
+    completeButton.disabled = true;
+
+    completedCount++;
+}
+});
+let notes = document.getElementById("notes");
+
+notes.value = localStorage.getItem("studyNotes") || "";
+
+notes.addEventListener("input", function() {
+    localStorage.setItem("studyNotes", notes.value);
+});
+function clearTasks() {
+    if (confirm("Are you sure you want to delete all tasks?")) {
+        document.getElementById("taskList").innerHTML = "";
+        tasks = [];
+        count = 0;
+        completedCount = 0;
+
+        localStorage.removeItem("studyTasks");
+
+        document.getElementById("taskCount").innerText = "0";
+        document.getElementById("progressText").innerText = "0% completed";
+    }
+}
+</script>   
+ <!-- 🟨 NEW: JavaScript ends here -->
+
+</body>
+
+</html>
